@@ -13,6 +13,7 @@
     <modules>
         <module>gamelib-api</module>
         <module>gamelib-plugin</module>
+        <module>gamelib-bridge</module>
     </modules>
 
     <properties>

@@ -1,0 +1,97 @@
+####################
+#                  #
+# GameLib settings #
+#                  #
+####################
+
+#Storage driver of the plugin.
+#
+# The plugin does not have official
+# bungeecord support, but it does support
+# mysql, which you can use to synchronize
+# data between servers. You can choose to
+# have a primary server or share data between
+# them.
+#
+#   Mode => The storage driver mode. For sqlite,
+#           it will generate a local .db file in
+#           the plugin folder. For mysql, it will
+#           use the credentials and options specified
+#           on the mysql.yml file
+#
+#   Master => Whatever or not set this server as the
+#             primary one. Let's explain briefly what
+#             this means and how it affects.
+#
+# A master (primary) server holds and manages all the data,
+# meanwhile the other servers (slaves) limit to obtain the data.
+# The slave servers have a process que, in where they put a request
+# to write a key-value into the storage, and then the master server
+# processes it.
+# This is useful, for example, for networks in where you have a lobby
+# server, and then you have multiple sub-servers for that game lobby
+# server.
+#
+# Alternatively, if there's no primary, all the servers are able to
+# write and read into the database, at the same time. Even though in the
+# first place, this could look very nice, it actually affects negatively
+# the server performance, could cause concurrency problems and some others.
+#
+# If you only have one server, you can safely set Master to false; otherwise
+# it's highly recommended to set up a master server.
+#
+# NOTE: SQLite is not compatible with master server setups
+Storage:
+  Mode: sqlite
+  Master: false
+
+# WARNING: DO NOT MODIFY THIS VALUE MANUALLY, IT'S GENERATED
+# AUTOMATICALLY ON THE FIRST PLUGIN START, AND IT IDENTIFIES THIS
+# SERVER IN THE GAMELIB NETWORK
+Master:
+  UID: ""
+
+#Network communication mode
+#
+# As described in storage master, if master is enabled, the other
+# servers ask the main server to write and/or read into the database.
+#
+# This is managed by the network mode. To communicate the plugin
+# instances, the plugin has different ways of doing it so.
+#
+# bungee-bridge => [NOT RECOMMENDED] Due to its limitations, bungee-bridge
+#                  should be used only if no other option is possible. It requires
+#                  you to put GameLib-Bridge into your BungeeCord plugins folder
+#
+# websocket => [Requires setup] When you download the plugin .zip file, you
+#                  will see there's a websocket folder. That's the websocket server
+#                  that is able to communicate the plugin instances. You need a server
+#                  with shell access or node installed. It's recommended over all the
+#                  other options due to the control you have over its functionality
+#
+# redis => The easiest one, it only requires you to have a redis server.
+#                  It does not require extra setup, although it's recommended to set up clusters
+#                  on your redis server, it's not needed
+NetworkMode: bungee-bridge
+
+#Websocket configuration
+#
+# To ensure that only your servers
+# access the websocket, there's a certificate
+# file which the plugin generates. That's part
+# of the setup of the websocket configuration.
+#
+# We highly recommend you to read the documentation
+# before setting up websocket communication
+Websocket:
+  Host: ''
+  Port: 0000
+  Certificate: 'ws_certificate.cert'
+
+#Redis configuration
+Redis:
+  Cluster: false
+  Host: ''
+  Port: 0000
+  User: ''
+  Password: ''
