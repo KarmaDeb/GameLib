@@ -1,5 +1,7 @@
 package es.karmadev.gamelib;
 
+import es.karmadev.gamelib.storage.StorageDriver;
+
 /**
  * Represents the game lib
  */
@@ -47,4 +49,11 @@ public abstract class GameLib {
      * @return the player manager
      */
     public abstract PlayerManager getPlayerManager();
+
+    /**
+     * Get the library storage driver
+     *
+     * @return the storage driver
+     */
+    public abstract StorageDriver getStorageDriver();
 }
