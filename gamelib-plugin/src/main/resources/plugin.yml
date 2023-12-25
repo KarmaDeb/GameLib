@@ -1,0 +1,6 @@
+name: 'GameLib'
+description: 'GameLib is a library plugin which helps in development for minecraft'
+version: '${project.version}'
+main: es.karmadev.gamelib.plugin.GamePlugin
+
+author: KarmaDev

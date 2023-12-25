@@ -1,5 +1,7 @@
-package es.karmadev.gamelib.entity;
+package es.karmadev.gamelib.entity.human;
 
+import es.karmadev.gamelib.entity.EngineEntity;
+import es.karmadev.gamelib.entity.NPCEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +12,7 @@ import java.util.UUID;
  * always represents a player, and will
  * never be represented by {@link NPCEntity}
  */
-public abstract class HumanPlayer extends EngineEntity {
+public abstract class HumanPlayer extends EngineEntity implements HumanOffline {
 
     /**
      * Create a new engine entity
@@ -69,8 +71,9 @@ public abstract class HumanPlayer extends EngineEntity {
      * Send an actionbar to the player
      *
      * @param actionbar the actionbar to send
+     * @param replacements the message replacements
      */
-    public abstract void sendActionbar(final @Nullable String actionbar);
+    public abstract void sendActionbar(final @NotNull String actionbar, final Object... replacements);
 
     /**
      * Clear the player actionbar
