@@ -2,12 +2,20 @@ package es.karmadev.gamelib.plugin.inject;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import es.karmadev.gamelib.GameLib;
+import es.karmadev.gamelib.PlayerManager;
+import es.karmadev.gamelib.plugin.GameLibImpl;
+import es.karmadev.gamelib.plugin.GamePlugin;
 import es.karmadev.gamelib.plugin.inject.annotations.PostConstruct;
+import es.karmadev.gamelib.plugin.manager.GamePlayerManager;
+import es.karmadev.gamelib.plugin.manager.GameStorageDriver;
+import es.karmadev.gamelib.storage.StorageDriver;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,11 +24,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.logging.Level;
 
+@Singleton
 public class GameModule extends AbstractModule implements TypeListener {
 
-    private final JavaPlugin plugin;
+    private final GamePlugin plugin;
 
-    public GameModule(final JavaPlugin plugin) {
+    public GameModule(final GamePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -32,7 +41,14 @@ public class GameModule extends AbstractModule implements TypeListener {
         super.bindListener(Matchers.any(), this);
 
         super.bind(JavaPlugin.class).toInstance(plugin);
+
         super.bind(PluginManager.class).toInstance(plugin.getServer().getPluginManager());
+        super.bind(PlayerManager.class).to(GamePlayerManager.class);
+        super.bind(StorageDriver.class).to(GameStorageDriver.class);
+    }
+
+    public void setLibBinding(final GameLibImpl impl) {
+        super.bind(GameLib.class).toInstance(impl);
     }
 
     /**

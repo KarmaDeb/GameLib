@@ -1,10 +1,10 @@
 package es.karmadev.gamelib.plugin.manager;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import es.karmadev.gamelib.PlayerManager;
 import es.karmadev.gamelib.entity.human.HumanOffline;
 import es.karmadev.gamelib.entity.human.HumanPlayer;
-import es.karmadev.gamelib.plugin.inject.annotations.PostConstruct;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,14 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class GamePlayerManager implements PlayerManager {
 
-    private Collection<HumanOffline> offlinePlayers;
-    private Collection<HumanPlayer> onlinePlayers;
+    private final Collection<HumanOffline> offlinePlayers = ConcurrentHashMap.newKeySet();
+    private final Collection<HumanPlayer> onlinePlayers = ConcurrentHashMap.newKeySet();
 
-    @PostConstruct
-    public void init() {
-        offlinePlayers = ConcurrentHashMap.newKeySet();
-        onlinePlayers = ConcurrentHashMap.newKeySet();
-    }
+    @Inject
+    public GamePlayerManager() {}
 
     /**
      * Get all the offline players

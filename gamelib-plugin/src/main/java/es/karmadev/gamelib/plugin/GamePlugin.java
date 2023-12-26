@@ -3,17 +3,12 @@ package es.karmadev.gamelib.plugin;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import es.karmadev.gamelib.GameLib;
 import es.karmadev.gamelib.plugin.inject.GameModule;
 import es.karmadev.gamelib.plugin.listener.ListenerInitializer;
 import es.karmadev.gamelib.plugin.manager.communications.CertManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -22,6 +17,8 @@ public class GamePlugin extends JavaPlugin {
 
     @Inject
     private ListenerInitializer listenerInitializer;
+    @Inject
+    private GameLibImpl gameLib;
 
     @Override
     public void onEnable() {
@@ -37,15 +34,24 @@ public class GamePlugin extends JavaPlugin {
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
-        } catch (CertificateException | NoSuchAlgorithmException | SignatureException |
-                 InvalidKeyException | NoSuchProviderException | IOException ex) {
+        } catch (Throwable ex) {
             getLogger().log(Level.SEVERE, ex, () -> "Failed to generate GameLib certificate. Plugin won't start!");
 
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
+        module.setLibBinding(gameLib);
         listenerInitializer.init(injector);
+    }
+
+    /**
+     * Get the current game lib instance
+     *
+     * @return the game lib instance
+     */
+    public GameLib getGameLib() {
+        return gameLib;
     }
 
     private boolean isInvalidCertificate(final X509Certificate certificate) {
@@ -73,7 +79,7 @@ public class GamePlugin extends JavaPlugin {
         }
 
         if (invalid != null) {
-            getLogger().log(Level.WARNING, "GameLib loaded or generated an invalid certificate. Plugin won't start!");
+            getLogger().log(Level.WARNING, "GameLib loaded or generated an invalid certificate (" + invalid + "). Plugin won't start!");
             return true;
         }
 
@@ -85,18 +91,18 @@ public class GamePlugin extends JavaPlugin {
             case "cn":
                 try {
                     UUID.fromString(value);
-                    return true;
-                } catch (IllegalArgumentException ex) {
                     return false;
+                } catch (IllegalArgumentException ex) {
+                    return true;
                 }
             case "ou":
             case "o":
-                return value.equals("RedDo");
+                return !value.equals("RedDo");
             case "l":
             case "st":
-                return value.equals("Madrid");
+                return !value.equals("Madrid");
             case "c":
-                return value.equals("Spain");
+                return !value.equals("Spain");
             default:
                 return false;
         }
