@@ -13,6 +13,7 @@ public interface StorageDriver {
      * storage driver
      *
      * @param schema the schema to register
+     * @param driver the driver
      */
     void registerSchema(final StorageSchema<?> schema, final SchemaDriver driver);
 
