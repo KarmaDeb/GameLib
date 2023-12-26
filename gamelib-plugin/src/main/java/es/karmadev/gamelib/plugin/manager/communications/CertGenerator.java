@@ -1,12 +1,21 @@
 package es.karmadev.gamelib.plugin.manager.communications;
 
-import sun.security.x509.*;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -15,30 +24,31 @@ public class CertGenerator {
 
     private final static long hundredYears = TimeUnit.DAYS.toMillis(36500);
 
-    static X509Certificate generateSigned(final KeyPair pair, final UUID libId) throws CertificateException, NoSuchAlgorithmException,
-            InvalidKeyException, NoSuchProviderException, SignatureException, IOException {
-        X509CertInfo info = new X509CertInfo();
-        Date startDate = new Date();
-        Date endDate = new Date(startDate.getTime() + hundredYears);
+    static X509Certificate generateSigned(final KeyPair pair, final UUID libId) throws OperatorCreationException, CertIOException,
+            CertificateException {
+        final Provider provider = new BouncyCastleProvider();
 
-        CertificateValidity validity = new CertificateValidity(startDate, endDate);
-        BigInteger serial = new BigInteger(64, new SecureRandom());
+        long now = System.currentTimeMillis();
+        Date start = new Date(now);
 
         X500Name proprietary = new X500Name("CN=" + libId + ",OU=RedDo,O=RedDo,L=Madrid,ST=Madrid,C=Spain");
+        BigInteger serial = new BigInteger(Long.toString(now));
 
-        info.set(X509CertInfo.VALIDITY, validity);
-        info.set(X509CertInfo.SERIAL_NUMBER, serial);
-        info.set(X509CertInfo.SUBJECT, new CertificateSubjectName(proprietary));
-        info.set(X509CertInfo.ISSUER, new CertificateIssuerName(proprietary));
-        info.set(X509CertInfo.KEY, new CertificateX509Key(pair.getPublic()));
-        info.set(X509CertInfo.VERSION, new CertificateVersion(CertificateVersion.V3));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
+        calendar.add(Calendar.YEAR, 100);
 
-        AlgorithmId algorithmId = new AlgorithmId(AlgorithmId.SHA256withECDSA_oid);
-        info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(algorithmId));
+        Date end = calendar.getTime();
+        ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSA")
+                .build(pair.getPrivate());
 
-        X509CertImpl cert = new X509CertImpl(info);
-        cert.sign(pair.getPrivate(), "SHA256withRSA");
+        JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(proprietary, serial, start,
+                end, proprietary, pair.getPublic());
 
-        return cert;
+        BasicConstraints constraints = new BasicConstraints(true);
+        certBuilder.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, constraints);
+
+        return new JcaX509CertificateConverter().setProvider(provider)
+                .getCertificate(certBuilder.build(signer));
     }
 }

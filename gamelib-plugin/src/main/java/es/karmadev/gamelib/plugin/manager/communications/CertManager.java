@@ -1,13 +1,14 @@
 package es.karmadev.gamelib.plugin.manager.communications;
 
+import org.bouncycastle.operator.OperatorCreationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.security.*;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -24,8 +25,7 @@ public class CertManager {
         this.plugin = plugin;
     }
 
-    public X509Certificate generateCertificate() throws NoSuchAlgorithmException, CertificateException, SignatureException,
-            InvalidKeyException, NoSuchProviderException, IOException {
+    public X509Certificate generateCertificate() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException {
         Path certFile = plugin.getDataFolder().toPath().resolve("gamelib.crt");
         if (Files.exists(certFile)) {
             return getCertificate(certFile);
@@ -37,7 +37,11 @@ public class CertManager {
         KeyPair pair = generator.generateKeyPair();
         X509Certificate certificate = CertGenerator.generateSigned(pair, UUID.randomUUID());
 
-        Files.write(certFile, certificate.getEncoded());
+        Path directory = certFile.getParent();
+        if (!Files.exists(directory)) {
+            Files.createDirectories(directory);
+        }
+        Files.write(certFile, certificate.getEncoded(), StandardOpenOption.CREATE);
         return certificate;
     }
 
