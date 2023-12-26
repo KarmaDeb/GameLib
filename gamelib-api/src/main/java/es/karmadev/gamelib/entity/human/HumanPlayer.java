@@ -1,5 +1,6 @@
 package es.karmadev.gamelib.entity.human;
 
+import es.karmadev.gamelib.Condition;
 import es.karmadev.gamelib.entity.EngineEntity;
 import es.karmadev.gamelib.entity.NPCEntity;
 import org.jetbrains.annotations.NotNull;
@@ -95,4 +96,36 @@ public abstract class HumanPlayer extends EngineEntity implements HumanOffline {
     public void clearSubtitle() {
         sendTitle(null, "");
     }
+
+    /**
+     * Get a player condition
+     *
+     * @param condition the condition
+     * @return the player condition
+     * @param <T> the condition type
+     */
+    public <T> T getCondition(final Condition<T> condition) {
+        if (condition == null) return null;
+        return getCondition(condition, null);
+    }
+
+    /**
+     * Get a player condition
+     *
+     * @param condition the condition to
+     *                  retrieve
+     * @param def the default condition
+     * @return the condition
+     * @param <T> the condition type
+     */
+    public abstract <T> T getCondition(final Condition<T> condition, final T def);
+
+    /**
+     * Set a player condition
+     *
+     * @param condition the condition to set
+     * @param value the condition value
+     * @param <T> the condition type
+     */
+    public abstract <T> void setCondition(final Condition<T> condition, final @Nullable T value);
 }
