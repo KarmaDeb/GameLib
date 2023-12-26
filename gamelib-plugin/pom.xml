@@ -25,5 +25,10 @@
             <groupId>es.karmadev</groupId>
             <artifactId>gamelib-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+        </dependency>
     </dependencies>
 </project>
