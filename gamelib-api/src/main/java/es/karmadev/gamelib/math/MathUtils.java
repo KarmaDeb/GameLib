@@ -86,6 +86,28 @@ public final class MathUtils {
     }
 
     /**
+     * Get the distance from a point to the
+     * center point of a sphere
+     *
+     * @param centerX the sphere center X
+     * @param centerY the sphere center Y
+     * @param centerZ the sphere center Z
+     * @param currentX the target X
+     * @param currentY the target Y
+     * @param currentZ the target Z
+     * @return the distance from the center
+     * to the target
+     */
+    public static double calcDistToCenter(final double centerX, final double centerY, final double centerZ,
+                                          final double currentX, final double currentY, final double currentZ) {
+        double x = Math.pow(currentX - centerX, 2);
+        double y = Math.pow(currentY - centerY, 2);
+        double z = Math.pow(currentZ - centerZ, 2);
+
+        return Math.sqrt(x + y + z);
+    }
+
+    /**
      * Calculate the area of a cube. The
      * area is represented on the number
      * of cubes which forms the final cube.
