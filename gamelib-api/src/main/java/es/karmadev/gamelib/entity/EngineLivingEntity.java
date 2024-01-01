@@ -6,24 +6,12 @@ import es.karmadev.gamelib.pos.Position3D;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import java.util.UUID;
-
 /**
  * Represents a GameLib entity. This
  * represents a generic entity, which
  * can be any kind
  */
-public abstract class EngineLivingEntity extends EngineEntity implements HeadedEntity {
-
-    /**
-     * Create a new engine entity
-     *
-     * @param name     the entity name
-     * @param uniqueId the entity unique ID
-     */
-    public EngineLivingEntity(final String name, final UUID uniqueId) {
-        super(name, uniqueId);
-    }
+public interface EngineLivingEntity extends EngineEntity, HeadedEntity {
 
     /**
      * Get if the entity is able to see
@@ -40,7 +28,7 @@ public abstract class EngineLivingEntity extends EngineEntity implements HeadedE
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSeeDirectly(final EngineEntity other) {
+    default boolean canSeeDirectly(final EngineEntity other) {
         return canSeeDirectly(other, 1, 1, 1, -1, -1, -1);
     }
 
@@ -60,7 +48,7 @@ public abstract class EngineLivingEntity extends EngineEntity implements HeadedE
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSeeDirectly(final EngineEntity other,
+    default boolean canSeeDirectly(final EngineEntity other,
                           final double rayAreaOffset) {
         double pos = Math.abs(rayAreaOffset);
         double neg = MathUtils.toAbsNegative(rayAreaOffset);
@@ -86,7 +74,7 @@ public abstract class EngineLivingEntity extends EngineEntity implements HeadedE
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSeeDirectly(final EngineEntity other,
+    default boolean canSeeDirectly(final EngineEntity other,
                           final double rayAreaXOffset, final double rayAreaYOffset, final double rayAreaZOffset) {
         double posX = Math.abs(rayAreaXOffset);
         double posY = Math.abs(rayAreaYOffset);
@@ -120,7 +108,7 @@ public abstract class EngineLivingEntity extends EngineEntity implements HeadedE
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSeeDirectly(final EngineEntity otherEntity,
+    default boolean canSeeDirectly(final EngineEntity otherEntity,
                           final double rayAreaXOffset, final double rayAreaYOffset, final double rayAreaZOffset,
                           final double rayAreaXOffset2, final double rayAreaYOffset2, final double rayAreaZOffset2) {
         Position3D current = getPosition();

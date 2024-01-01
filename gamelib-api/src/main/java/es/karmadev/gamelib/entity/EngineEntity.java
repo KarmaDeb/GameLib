@@ -10,8 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -19,46 +17,28 @@ import java.util.UUID;
  * represents a generic entity, which
  * can be any kind
  */
-public abstract class EngineEntity implements LibSerializable<EngineEntity> {
-
-    protected String name;
-    protected UUID uniqueId;
-
-    /**
-     * Create a new engine entity
-     *
-     * @param name the entity name
-     * @param uniqueId the entity unique ID
-     */
-    public EngineEntity(final String name, final UUID uniqueId) {
-        this.name = name;
-        this.uniqueId = uniqueId;
-    }
-
+public interface EngineEntity extends LibSerializable<EngineEntity> {
+    
     /**
      * Get the entity ID
      *
      * @return the entity ID
      */
-    public abstract int getId();
+    int getId();
 
     /**
      * Get the entity name
      *
      * @return the entity name
      */
-    public final String getName() {
-        return name;
-    }
+    String getName();
 
     /**
      * Get the entity unique ID
      *
      * @return the entity unique ID
      */
-    public final UUID getUniqueId() {
-        return uniqueId;
-    }
+    UUID getUniqueId();
 
     /**
      * Get if the entity has the default
@@ -68,21 +48,21 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      *
      * @return if the entity has AI
      */
-    public abstract boolean hasAI();
+    boolean hasAI();
 
     /**
      * Get the entity position
      *
      * @return the entity position
      */
-    public abstract Position3D getPosition();
+    Position3D getPosition();
 
     /**
      * Get the entity world
      *
      * @return the entity world
      */
-    public abstract World getWorld();
+    World getWorld();
 
     /**
      * Move the entity to the specified
@@ -91,7 +71,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @param other the position to move to
      * @return if the movement was allowed
      */
-    public abstract boolean moveTo(final Location other);
+    boolean moveTo(final Location other);
 
     /**
      * Move the entity to another
@@ -100,7 +80,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @param other the other entity
      * @return if the movement was allowed
      */
-    public boolean moveWith(final EngineEntity other) {
+    default boolean moveWith(final EngineEntity other) {
         if (other == null || other.equals(this)) return false;
 
         Position3D otherPos = other.getPosition();
@@ -121,7 +101,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      *              with
      * @return if the swap was allowed
      */
-    public boolean swapPositions(final EngineEntity other) {
+    default boolean swapPositions(final EngineEntity other) {
         if (other == null || other.equals(this)) return false;
 
         Position3D current = getPosition();
@@ -162,7 +142,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSee(final EngineEntity other) {
+    default boolean canSee(final EngineEntity other) {
         return canSee(other, 1, 1, 1, -1, -1, -1);
     }
 
@@ -185,7 +165,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSee(final EngineEntity other,
+    default boolean canSee(final EngineEntity other,
                           final double rayAreaOffset) {
         double pos = Math.abs(rayAreaOffset);
         double neg = MathUtils.toAbsNegative(rayAreaOffset);
@@ -214,7 +194,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSee(final EngineEntity other,
+    default boolean canSee(final EngineEntity other,
                           final double rayAreaXOffset, final double rayAreaYOffset, final double rayAreaZOffset) {
         double posX = Math.abs(rayAreaXOffset);
         double posY = Math.abs(rayAreaYOffset);
@@ -251,7 +231,7 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
      * @return if the entity can see the other
      * entity
      */
-    public boolean canSee(final EngineEntity otherEntity,
+    default boolean canSee(final EngineEntity otherEntity,
                           final double rayAreaXOffset, final double rayAreaYOffset, final double rayAreaZOffset,
                           final double rayAreaXOffset2, final double rayAreaYOffset2, final double rayAreaZOffset2) {
         Position3D current = getPosition();
@@ -305,41 +285,5 @@ public abstract class EngineEntity implements LibSerializable<EngineEntity> {
         }
 
         return true;
-    }
-
-    /**
-     * Returns a hash code value for the object. This method is
-     * supported for the benefit of hash tables such as those provided by
-     * {@link HashMap}.
-     * <p>
-     * The general contract of {@code hashCode} is:
-     * <ul>
-     * <li>Whenever it is invoked on the same object more than once during
-     *     an execution of a Java application, the {@code hashCode} method
-     *     must consistently return the same integer, provided no information
-     *     used in {@code equals} comparisons on the object is modified.
-     *     This integer need not remain consistent from one execution of an
-     *     application to another execution of the same application.
-     * <li>If two objects are equal according to the {@link
-     *     #equals(Object) equals} method, then calling the {@code
-     *     hashCode} method on each of the two objects must produce the
-     *     same integer result.
-     * <li>It is <em>not</em> required that if two objects are unequal
-     *     according to the {@link #equals(Object) equals} method, then
-     *     calling the {@code hashCode} method on each of the two objects
-     *     must produce distinct integer results.  However, the programmer
-     *     should be aware that producing distinct integer results for
-     *     unequal objects may improve the performance of hash tables.
-     * </ul>
-     *
-     * @return a hash code value for this object.
-     * @implSpec As far as is reasonably practical, the {@code hashCode} method defined
-     * by class {@code Object} returns distinct integers for distinct objects.
-     * @see Object#equals(Object)
-     * @see System#identityHashCode
-     */
-    @Override
-    public final int hashCode() {
-        return Objects.hashCode(uniqueId);
     }
 }

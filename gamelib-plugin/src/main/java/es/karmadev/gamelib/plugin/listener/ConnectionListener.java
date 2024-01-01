@@ -2,17 +2,14 @@ package es.karmadev.gamelib.plugin.listener;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import es.karmadev.gamelib.entity.EngineEntity;
 import es.karmadev.gamelib.entity.human.HumanPlayer;
 import es.karmadev.gamelib.plugin.GameLibImpl;
-import es.karmadev.gamelib.plugin.impl.entity.GameHPlayer;
+import es.karmadev.gamelib.plugin.GamePlugin;
 import es.karmadev.gamelib.plugin.manager.GamePlayerManager;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -20,8 +17,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class ConnectionListener implements Listener {
 
     @Inject
+    private GamePlugin plugin;
+    @Inject
     private GameLibImpl lib;
-
     @Inject
     private GamePlayerManager playerManager;
 
@@ -39,17 +37,8 @@ public class ConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        HumanPlayer client = new GameHPlayer(player);
+        HumanPlayer client = playerManager.createPlayer(player);
 
-        playerManager.addPlayer(client);
-    }
-
-    @EventHandler
-    public void onDeath(EntityDeathEvent e) {
-        Entity entity = e.getEntity();
-        if (!(entity instanceof Player)) {
-            EngineEntity engineEntity = lib.getEntity(entity.getUniqueId());
-            lib.removeEntity(engineEntity);
-        }
+        client.sendMessage("Hello {1}", player.getName());
     }
 }

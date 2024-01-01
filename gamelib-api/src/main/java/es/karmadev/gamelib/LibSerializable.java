@@ -1,10 +1,6 @@
 package es.karmadev.gamelib;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import java.util.Map;
+import es.karmadev.gamelib.serialization.FieldCollection;
 
 /**
  * Represents an element which can
@@ -25,23 +21,7 @@ public interface LibSerializable<A> {
      *
      * @return the serialized object
      */
-    Map<String, Object> serialize();
-
-    /**
-     * Serialize the element into
-     * a json object
-     *
-     * @return the serialized object
-     */
-    default JsonObject serializeToJson() {
-        Map<String, Object> serialized = serialize();
-        if (serialized == null) return new JsonObject();
-
-        Gson gson = new GsonBuilder().create();
-        String jsonString = gson.toJson(serialized);
-
-        return gson.fromJson(jsonString, JsonObject.class);
-    }
+    FieldCollection serialize();
 
     /**
      * Load the data and put it in
@@ -51,5 +31,5 @@ public interface LibSerializable<A> {
      * @return the object with the loaded
      * data
      */
-    A loadData(final Map<String, Object> data);
+    A loadData(final FieldCollection data);
 }

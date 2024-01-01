@@ -4,3 +4,8 @@ version: '${project.version}'
 main: es.karmadev.gamelib.plugin.GamePlugin
 
 author: KarmaDev
+
+libraries:
+  - 'com.google.inject.extensions:guice-assistedinject:7.0.0'
+  - 'com.google.inject:guice:7.0.0'
+  - 'org.bouncycastle:bcpkix-jdk18on:1.77'

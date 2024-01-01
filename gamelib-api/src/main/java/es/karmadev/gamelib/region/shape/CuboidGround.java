@@ -182,4 +182,23 @@ public abstract class CuboidGround implements Playground {
 
         return blocks;
     }
+
+    /**
+     * Get the distance between the
+     * coordinates and the center
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     * @return the distance between
+     */
+    @Override
+    public double distance(final double x, final double y, final double z) {
+        Position3D center = getCenter();
+        double vX = center.getX() - x;
+        double vY = center.getY() - y;
+        double vZ = center.getZ() - z;
+
+        return Math.sqrt(vX + vY + vZ);
+    }
 }

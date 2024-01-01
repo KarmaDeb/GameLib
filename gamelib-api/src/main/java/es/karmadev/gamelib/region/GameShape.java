@@ -7,5 +7,5 @@ package es.karmadev.gamelib.region;
 public enum GameShape {
     CUBE,
     TETRAHEDRON,
-    CYLINDER
+    SPHERE
 }

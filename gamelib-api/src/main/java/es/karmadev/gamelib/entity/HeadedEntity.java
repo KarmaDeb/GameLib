@@ -16,11 +16,18 @@ public interface HeadedEntity {
     double DEFAULT_ERROR_THRESHOLD = 0.05d;
 
     /**
-     * Get the entity head size
+     * Get the entity head width
      *
-     * @return the entity head size
+     * @return the entity head width
      */
-    double getHeadSize();
+    double getHeadWidth();
+
+    /**
+     * Get the entity head height
+     *
+     * @return the head height
+     */
+    double getHeadHeight();
 
     /**
      * Get the center of the head position
@@ -57,7 +64,7 @@ public interface HeadedEntity {
      * head position
      */
     default boolean isInHeadArea(final Position3D position, final double errorThreshold) {
-        return isInHeadArea(position, errorThreshold, getHeadSize());
+        return isInHeadArea(position, errorThreshold, getHeadWidth());
     }
 
     /**
@@ -68,7 +75,7 @@ public interface HeadedEntity {
      * @param errorThreshold the error threshold
      *                       to allow in the operations
      * @param headSizeOverride the entity head size override
-     *                         if any. The default value is {@link #getHeadSize()}
+     *                         if any. The default value is {@link #getHeadWidth()}
      * @return if the position is inside the
      * head position
      */

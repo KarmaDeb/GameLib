@@ -6,8 +6,11 @@ import es.karmadev.gamelib.GameLib;
 import es.karmadev.gamelib.PlayerManager;
 import es.karmadev.gamelib.entity.EngineEntity;
 import es.karmadev.gamelib.exception.PlaygroundPositionException;
-import es.karmadev.gamelib.plugin.impl.entity.GameEntity;
+import es.karmadev.gamelib.plugin.data.EntityData;
 import es.karmadev.gamelib.plugin.impl.region.Cuboid;
+import es.karmadev.gamelib.plugin.impl.region.Sphere;
+import es.karmadev.gamelib.plugin.manager.GamePlayerManager;
+import es.karmadev.gamelib.plugin.manager.GameStorageDriver;
 import es.karmadev.gamelib.pos.Position3D;
 import es.karmadev.gamelib.region.GameShape;
 import es.karmadev.gamelib.region.Playground;
@@ -24,8 +27,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Singleton
 public class GameLibImpl extends GameLib {
 
-    @Inject
-    private GamePlugin plugin;
+    private final GamePlugin plugin;
+    private final EntityData entityData;
+
     @Inject
     private PlayerManager manager;
     @Inject
@@ -34,8 +38,10 @@ public class GameLibImpl extends GameLib {
     private final Set<EngineEntity> entities = ConcurrentHashMap.newKeySet();
 
     @Inject
-    public GameLibImpl() {
+    public GameLibImpl(final GamePlugin plugin, final EntityData data) {
         registerAsInstance();
+        this.plugin = plugin;
+        this.entityData = data;
     }
 
     /**
@@ -122,17 +128,20 @@ public class GameLibImpl extends GameLib {
                     throw new PlaygroundPositionException(shape, 2, positions.length);
                 }
 
-                return new Cuboid(world, positions[0], positions[1]);
-            case CYLINDER:
-                if (positions.length < 1) {
-                    throw new PlaygroundPositionException(shape, 1, 0);
+                return new Cuboid(this, world, positions[0], positions[1]);
+            case SPHERE:
+                if (positions.length < 2) {
+                    throw new PlaygroundPositionException(shape, 2, positions.length);
                 }
 
-                break;
+                double radius = Math.abs(positions[0].distance(positions[1]));
+                return new Sphere(this, world, positions[0], radius);
             default:
                 throw new IllegalStateException("Unsupported shape: " + shape.name());
         }
+    }
 
-        return null;
+    public EntityData getEntityData() {
+        return entityData;
     }
 }

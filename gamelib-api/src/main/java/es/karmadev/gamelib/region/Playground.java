@@ -61,4 +61,48 @@ public interface Playground {
      * @return the playground entities
      */
     Collection<EngineEntity> getEntities();
+
+    /**
+     * Get the distance between the
+     * coordinates and the center
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     * @return the distance between
+     */
+    double distance(final double x, final double y, final double z);
+
+    /**
+     * Get the distance between the
+     * position and the center
+     *
+     * @param position the position
+     * @return the distance between
+     */
+    default double distance(final Position3D position) {
+        return distance(position.getX(), position.getY(), position.getZ());
+    }
+
+    /**
+     * Get the distance between the
+     * block and the center
+     *
+     * @param block the block
+     * @return the distance between
+     */
+    default double distance(final Block block) {
+        return distance(block.getX(), block.getY(), block.getZ());
+    }
+
+    /**
+     * Get the distance between the
+     * entity and the center
+     *
+     * @param entity the entity
+     * @return the distance between
+     */
+    default double distance(final EngineEntity entity) {
+        return distance(entity.getPosition());
+    }
 }

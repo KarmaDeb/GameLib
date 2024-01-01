@@ -1,16 +1,11 @@
 package es.karmadev.gamelib.plugin.impl.entity;
 
-import com.google.inject.Inject;
 import es.karmadev.gamelib.Condition;
-import es.karmadev.gamelib.entity.EngineEntity;
 import es.karmadev.gamelib.entity.human.HumanPlayer;
 import es.karmadev.gamelib.plugin.GameLibImpl;
-import es.karmadev.gamelib.pos.Position3D;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,10 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GameHPlayer extends HumanPlayer {
+public class GameHPlayer extends GameLivingEntity implements HumanPlayer {
 
-    @Inject
-    private GameLibImpl lib;
+    private final GameLibImpl lib;
 
     private final Player player;
     private final Map<Condition<?>, Object> conditions = new ConcurrentHashMap<>();
@@ -32,53 +26,10 @@ public class GameHPlayer extends HumanPlayer {
      * @param player the player which represents
      *               this game human player
      */
-    public GameHPlayer(final Player player) {
-        super(player.getName(), player.getUniqueId());
+    public GameHPlayer(final GameLibImpl lib, final Player player) {
+        super(lib, player);
+        this.lib = lib;
         this.player = player;
-
-        lib.addEntity(this);
-    }
-
-    /**
-     * Get the entity ID
-     *
-     * @return the entity ID
-     */
-    @Override
-    public int getId() {
-        return player.getEntityId();
-    }
-
-    /**
-     * Get the entity position
-     *
-     * @return the entity position
-     */
-    @Override
-    public Position3D getPosition() {
-        return Position3D.fromLocation(player.getLocation());
-    }
-
-    /**
-     * Get the entity world
-     *
-     * @return the entity world
-     */
-    @Override
-    public World getWorld() {
-        return player.getWorld();
-    }
-
-    /**
-     * Move the entity to the specified
-     * position
-     *
-     * @param other the position to move to
-     * @return if the movement was allowed
-     */
-    @Override
-    public boolean moveTo(final Location other) {
-        return player.teleport(other);
     }
 
     /**
@@ -90,6 +41,8 @@ public class GameHPlayer extends HumanPlayer {
      */
     @Override
     public void sendMessage(final @NotNull String message, final Object... replacements) {
+        System.out.println(lib);
+
         String parsed = build(message, replacements);
         player.sendMessage(
                 ChatColor.translateAlternateColorCodes('&', parsed)
@@ -180,30 +133,142 @@ public class GameHPlayer extends HumanPlayer {
         boolean escape = false;
 
         StringBuilder current = new StringBuilder();
-        for (char character : chars) {
+        String lastColor = "&r";
+
+        StringBuilder specialChar = new StringBuilder();
+        int specialAmount = -1;
+        boolean canSpecial = true;
+        boolean catchSpecial = false;
+        boolean start = false;
+        boolean end = false;
+        boolean doLast = true;
+        boolean doFirst = true;
+
+        for (int i = 0; i < chars.length; i++) {
+            char character = chars[i];
             if (character == '\\') {
                 escape = !escape;
             }
 
             if (building) {
                 if (character == '}') {
+                    catchSpecial = false;
                     building = false;
                     int num = Integer.parseInt(current.toString());
-                    current = new StringBuilder();
+                    current.setLength(0);
 
-                    if (num > 0 && num < replacements.length) {
+                    if (specialAmount == -1) specialAmount = 1;
+                    if (!start && !end) start = true;
+
+                    if (num > 0 && num <= replacements.length) {
                         Object replacement = replacements[num - 1];
-                        builder.append(replacement);
+
+                        for (int j = 0; j < replacements.length; j++) {
+                            Object indexReplacement = replacements[j];
+                            int index = specialChar.indexOf("%" + (j + 1));
+                            while (index > -1) {
+                                specialChar.replace(index, index + 2, String.valueOf(indexReplacement));
+                                index = specialChar.indexOf("%" + (j + 1));
+                            }
+                        }
+
+                        if (!canSpecial) {
+                            for (int j = 0; j < specialAmount; j++) {
+                                if (start && ((j == 0 && doFirst) || j > 0)) {
+                                    if (specialChar.length() != 0) {
+                                        builder.append(specialChar);
+                                    }
+                                }
+
+                                builder.append(replacement);
+
+                                if (end && ((j == specialAmount - 1 && doLast) || j < specialAmount - 1)) {
+                                    if (specialChar.length() != 0) {
+                                        builder.append(specialChar);
+                                    }
+                                }
+                            }
+                        } else {
+                            builder.append(replacement);
+                        }
                     } else {
-                        builder.append("<missing:{").append(num).append("}>");
+                        builder.append("§c<missing:{§earg[§3").append(num).append("§e]§c}>").append(lastColor);
                     }
+
+                    start = false;
+                    end = false;
+                    doLast = true;
+                    doFirst = true;
+                    specialChar.setLength(0);
+                    canSpecial = true;
+                    specialAmount = -1;
                 } else {
                     if (!Character.isDigit(character)) {
+                        if (character == '.' && canSpecial) {
+                            canSpecial = false;
+                            continue;
+                        }
+                        if (!canSpecial) {
+                            if (!escape) {
+                                switch (character) {
+                                    case '%':
+                                        specialChar.append(character);
+                                        continue;
+                                    case '+':
+                                        start = true;
+                                        continue;
+                                    case '-':
+                                        end = true;
+                                        continue;
+                                    case '!':
+                                        doFirst = false;
+                                        continue;
+                                    case '?':
+                                        doLast = false;
+                                        continue;
+                                }
+                            }
+
+                            if (character == '\'') {
+                                if (escape) {
+                                    specialChar.append(character);
+                                    continue;
+                                }
+
+                                catchSpecial = !catchSpecial;
+                                continue;
+                            }
+
+                            specialChar.append(character);
+                            continue;
+                        }
+
+                        start = false;
+                        end = false;
+                        catchSpecial = false;
+                        canSpecial = true;
                         escape = false;
                         building = false;
-                        builder.append(current);
-                        current = new StringBuilder();
+                        doLast = true;
+                        doFirst = true;
+                        builder.append("{").append(current);
+                        current.setLength(0);
+                        specialAmount = -1;
                     } else {
+                        if (catchSpecial) {
+                            specialChar.append(character);
+                            continue;
+                        }
+
+                        if (!canSpecial) {
+                            if (specialAmount != -1) {
+                                specialChar.append(specialAmount);
+                            }
+
+                            specialAmount = Integer.parseInt(String.valueOf(character));
+                            continue;
+                        }
+
                         current.append(character);
                     }
                 }
@@ -213,9 +278,25 @@ public class GameHPlayer extends HumanPlayer {
                     continue;
                 }
 
+                if ((character == '&' || character == '§') && !escape) {
+                    if (i + 1 < chars.length) {
+                        char next = chars[++i];
+                        ChatColor color = ChatColor.getByChar(Character.toLowerCase(next));
+                        if (color != null) {
+                            lastColor = "§" + next;
+                            builder.append(lastColor);
+                            continue;
+                        }
+
+                        builder.append(character).append(next);
+                        continue;
+                    }
+                }
+
                 if (!escape) {
                     builder.append(character);
                 }
+
                 escape = false;
             }
         }
@@ -224,25 +305,22 @@ public class GameHPlayer extends HumanPlayer {
     }
 
     /**
-     * Serialize the object
+     * Get the entity head width
      *
-     * @return the serialized object
+     * @return the entity head width
      */
     @Override
-    public Map<String, Object> serialize() {
-        throw new UnsupportedOperationException("Player does not support serialization!");
+    public double getHeadWidth() {
+        return 0.6; //known constant
     }
 
     /**
-     * Load the data and put it in
-     * the current object
+     * Get the entity head height
      *
-     * @param data the object data
-     * @return the object with the loaded
-     * data
+     * @return the head height
      */
     @Override
-    public EngineEntity loadData(final Map<String, Object> data) {
-        throw new UnsupportedOperationException("Player does not support serialization!");
+    public double getHeadHeight() {
+        return 0.6; //known constant
     }
 }

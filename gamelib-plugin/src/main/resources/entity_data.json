@@ -1,0 +1,470 @@
+{
+  "PLAYER": {
+    "width": 0.8,
+    "height": 0.8
+  },
+  "ALLAY": {
+    "width": 0.4,
+    "height": 0.4
+  },
+  "ARMOR_STAND": {
+    "width": 0.15,
+    "height": 0.25
+  },
+  "AXOLOTL": {
+    "width": 0.5,
+    "height": 0.4,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "POLAR_BEAR": {
+    "width": 0.6,
+    "height": 0.6,
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    }
+  },
+  "BEE": {
+    "width": 0.6,
+    "height": 0.6
+  },
+  "BREEZE": {
+    "width": 0.7,
+    "height": 0.7
+  },
+  "CAMEL": {
+    "width": 0.4,
+    "height": 0.8,
+    "offset": {
+      "x": 0.35,
+      "y": 0
+    }
+  },
+  "CAT": {
+    "width": 0.2,
+    "height": 0.2,
+    "offset": {
+      "x": 0.15,
+      "y": 0
+    }
+  },
+  "OCELOT": {
+    "width": 0.4,
+    "height": 0.3,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "CHEST_BOAT": {
+    "width": 1,
+    "height": 0.45
+  },
+  "COW": {
+    "width": 0.4,
+    "height": 0.5,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "MUSHROOM_COW": {
+    "width": 0.4,
+    "height": 0.5,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "CREEPER": {
+    "width": 0.7,
+    "height": 0.7
+  },
+  "DECORATED_POT": {
+    "width": 0.25,
+    "height": 0.25
+  },
+  "END_CRYSTAL": {
+    "width": 1.15,
+    "height": 1.25
+  },
+  "ENDER_DRAGON": {
+    "width": 2,
+    "height": 2,
+    "offset": {
+      "x": 5,
+      "y": -5
+    }
+  },
+  "ENDERMAN": {
+    "width": 0.7,
+    "height": 0.5,
+    "offset": {
+      "x": 0,
+      "y": 0.05
+    }
+  },
+  "FISH": {
+    "width": 0.25,
+    "height": 0.25
+  },
+  "FOX": {
+    "width": 0.6,
+    "height": 0.6,
+    "offset": {
+      "x": 0.10,
+      "y": 0.5
+    }
+  },
+  "FROG": {
+    "width": 0.2,
+    "height": 0.2
+  },
+  "GHAST": {
+    "width": 4,
+    "height": 4
+  },
+  "GOAT": {
+    "width": 0.6,
+    "height": 0.5,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "HOGLIN": {
+    "width": 0.9,
+    "height": 1,
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    }
+  },
+  "ZOGLIN": {
+    "width": 0.9,
+    "height": 1,
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    }
+  },
+  "HORSE": {
+    "width": 0.4,
+    "height": 1.3,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "DONKEY": {
+    "width": 0.4,
+    "height": 1,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "MULE": {
+    "width": 0.4,
+    "height": 1,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "SKELETON_HORSE": {
+    "width": 0.4,
+    "height": 1.3,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "ZOMBIE_HORSE": {
+    "width": 0.4,
+    "height": 1.3,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "EVOKER": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "EVOKER_FANGS": {
+    "width": 1,
+    "height": 1
+  },
+  "ILLUSIONER": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "PILLAGER": {
+    "width": 0.7,
+    "height": 0.6
+  },
+  "VINDICATOR": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "VILLAGER": {
+    "width": 0.7,
+    "height": 0.7
+  },
+  "VEX": {
+    "width": 0.4,
+    "height": 0.4
+  },
+  "RAVAGER": {
+    "width": 1.5,
+    "height": 1.2,
+    "offset": {
+      "x": 0.45,
+      "y": 0
+    }
+  },
+  "IRON_GOLEM": {
+    "width": 0.7,
+    "height": 0.7,
+    "offset": {
+      "x": 0.05,
+      "y": 0
+    }
+  },
+  "LLAMA": {
+    "width": 0.4,
+    "height": 1.2,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "TRADER_LLAMA": {
+    "width": 0.4,
+    "height": 1.2,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "PANDA": {
+    "width": 0.6,
+    "height": 0.9,
+    "offset": {
+      "x": 0.45,
+      "y": 0
+    }
+  },
+  "PARROT": {
+    "width": 0.15,
+    "height": 0.15,
+    "offset": {
+      "x": 0.15,
+      "y": 0
+    }
+  },
+  "BAT": {
+    "width": 0.15,
+    "height": 0.15
+  },
+  "PIG": {
+    "width": 0.5,
+    "height": 0.5,
+    "offset": {
+      "x": 0.2,
+      "y": 0
+    }
+  },
+  "PIGLIN": {
+    "width": 0.6,
+    "height": 0.6
+  },
+  "PIGLIN_BRUTE": {
+    "width": 0.6,
+    "height": 0.6
+  },
+  "ZOMBIFIED_PIGLIN": {
+    "width": 0.6,
+    "height": 0.6
+  },
+  "ARROW": {
+    "width": 0.15,
+    "height": 0.75
+  },
+  "RABBIT": {
+    "width": 0.4,
+    "height": 0.4
+  },
+  "SHEEP": {
+    "width": 0.4,
+    "height": 0.5,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "SHULKER": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "SKELETON": {
+    "width": 0.7,
+    "height": 0.5
+  },
+  "STRAY": {
+    "width": 0.7,
+    "height": 0.5
+  },
+  "WITHER_SKELETON": {
+    "width": 0.8,
+    "height": 0.8
+  },
+  "SLIME": {
+    "width": 0.25,
+    "height": 0.25
+  },
+  "MAGMA_CUBE": {
+    "width": 0.25,
+    "height": 0.25
+  },
+  "SNIFFER": {
+    "width": 1,
+    "height": 0.75,
+    "offset": {
+      "x": 1,
+      "y": 0
+    }
+  },
+  "SPIDER": {
+    "width": 0.7,
+    "height": 0.7,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "CAVE_SPIDER": {
+    "width": 0.4,
+    "height": 0.4,
+    "offset": {
+      "x": 0.05,
+      "y": 0
+    }
+  },
+  "SQUID": {
+    "width": 1,
+    "height": 1.15
+  },
+  "GLOW_SQUID": {
+    "width": 1,
+    "height": 1.15
+  },
+  "STRIDER": {
+    "width": 1,
+    "height": 0.8
+  },
+  "TADPOLE": {
+    "width": 0.4,
+    "height": 0.2
+  },
+  "TURTLE": {
+    "width": 0.4,
+    "height": 0.4,
+    "offset": {
+      "x": 0.25,
+      "y": 0
+    }
+  },
+  "WARDEN": {
+    "width": 1.25,
+    "height": 1.5
+  },
+  "WITHER": {
+    "width": 1,
+    "height": 1
+  },
+  "WITHER_SKULL": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "WOLF": {
+    "width": 0.4,
+    "height": 0.5,
+    "offset": {
+      "x": 0.15,
+      "y": 0
+    }
+  },
+  "ZOMBIE": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "GIANT": {
+    "width": 4,
+    "height": 4
+  },
+  "HUSK": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "DROWNED": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "ZOMBIE_VILLAGER": {
+    "width": 0.7,
+    "height": 0.7
+  },
+  "BLAZE": {
+    "width": 0.7,
+    "height": 0.7
+  },
+  "CHICKEN": {
+    "width": 0.15,
+    "height": 0.15,
+    "offset": {
+      "x": 0.15,
+      "y": 0.45
+    }
+  },
+  "DOLPHIN": {
+    "width": 1.3,
+    "height": 0.6
+  },
+  "ENDERMITE": {
+    "width": 0.5,
+    "height": 0.5
+  },
+  "GUARDIAN": {
+    "width": 0.9,
+    "height": 0.9
+  },
+  "ELDER_GUARDIAN": {
+    "width": 2,
+    "height": 2
+  },
+  "MINECART": {
+    "width": 0.95,
+    "height": 0.95
+  },
+  "PHANTOM": {
+    "width": 1,
+    "height": 1
+  },
+  "SILVERFISH": {
+    "width": 0.6,
+    "height": 0.6
+  },
+  "SNOW_GOLEM": {
+    "width": 0.8,
+    "height": 0.8
+  },
+  "WITCH": {
+    "width": 0.7,
+    "height": 0.7
+  }
+}

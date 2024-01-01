@@ -42,7 +42,7 @@ public abstract class SphereGround implements Playground {
      */
     @Override
     public GameShape getShape() {
-        return GameShape.CUBE;
+        return GameShape.SPHERE;
     }
 
     /**
@@ -97,6 +97,15 @@ public abstract class SphereGround implements Playground {
     }
 
     /**
+     * Get the radius of the sphere
+     *
+     * @return the radius
+     */
+    public double getRadius() {
+        return radius;
+    }
+
+    /**
      * Get all the playground corner
      * positions
      *
@@ -143,5 +152,23 @@ public abstract class SphereGround implements Playground {
         }
 
         return blocks;
+    }
+
+    /**
+     * Get the distance between the
+     * coordinates and the center
+     *
+     * @param x the x position
+     * @param y the y position
+     * @param z the z position
+     * @return the distance between
+     */
+    @Override
+    public double distance(final double x, final double y, final double z) {
+        return Math.sqrt(
+                Math.pow(x - centerX, 2) +
+                        Math.pow(y - centerY, 2) +
+                        Math.pow(z - centerZ, 2)
+        );
     }
 }

@@ -2,6 +2,8 @@ package es.karmadev.gamelib;
 
 import es.karmadev.gamelib.entity.human.HumanOffline;
 import es.karmadev.gamelib.entity.human.HumanPlayer;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,4 +69,24 @@ public interface PlayerManager {
         return getOnlinePlayers().stream().filter((player) -> player.getName().equals(name))
                 .findAny().orElse(null);
     }
+
+    /**
+     * Create a player from the player
+     * object
+     *
+     * @param player the player
+     * @return the player
+     */
+    @NotNull
+    HumanPlayer createPlayer(final Player player);
+
+    /**
+     * Create an offline player from
+     * the offline player object
+     *
+     * @param player the player
+     * @return the offline player
+     */
+    @Nullable
+    HumanOffline createPlayer(final OfflinePlayer player);
 }

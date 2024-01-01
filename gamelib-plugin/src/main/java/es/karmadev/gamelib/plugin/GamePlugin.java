@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import es.karmadev.gamelib.GameLib;
+import es.karmadev.gamelib.plugin.data.EntityData;
 import es.karmadev.gamelib.plugin.inject.GameModule;
 import es.karmadev.gamelib.plugin.listener.ListenerInitializer;
 import es.karmadev.gamelib.plugin.manager.communications.CertManager;
@@ -18,12 +19,14 @@ public class GamePlugin extends JavaPlugin {
     @Inject
     private ListenerInitializer listenerInitializer;
     @Inject
-    private GameLibImpl gameLib;
+    private EntityData entityData;
+    @Inject
+    private GameLib lib;
 
     @Override
     public void onEnable() {
-        final GameModule module = new GameModule(this);
-        final Injector injector = Guice.createInjector(module);
+        GameModule module = new GameModule(this);
+        Injector injector = Guice.createInjector(module);
         injector.injectMembers(this);
 
         try {
@@ -41,17 +44,7 @@ public class GamePlugin extends JavaPlugin {
             return;
         }
 
-        module.setLibBinding(gameLib);
         listenerInitializer.init(injector);
-    }
-
-    /**
-     * Get the current game lib instance
-     *
-     * @return the game lib instance
-     */
-    public GameLib getGameLib() {
-        return gameLib;
     }
 
     private boolean isInvalidCertificate(final X509Certificate certificate) {

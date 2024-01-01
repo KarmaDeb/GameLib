@@ -1,5 +1,7 @@
 package es.karmadev.gamelib.entity.human;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 /**
@@ -21,4 +23,20 @@ public interface HumanOffline {
      * @return the player unique id
      */
     UUID getUniqueId();
+
+    /**
+     * Get if the player is online
+     *
+     * @return if the player is
+     * online
+     */
+    boolean isOnline();
+
+    /**
+     * Get the human player instance
+     *
+     * @return the human player
+     */
+    @Nullable
+    HumanPlayer getPlayer();
 }
